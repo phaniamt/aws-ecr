@@ -1,0 +1,41 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: aws-ecr-updater
+  namespace: default
+spec:
+  schedule: "*/2 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1  
+  jobTemplate:
+    spec:
+      backoffLimit: 4
+      template:
+        spec:
+          serviceAccountName: aws-ecr
+          terminationGracePeriodSeconds: 0
+          restartPolicy: Never
+          containers:
+          - name: aws-ecr-updater
+            imagePullPolicy: IfNotPresent
+            image: phanikumary1995/aws-cli-kubectl:latest
+            env:
+            - name: AWS_ACCESS_KEY_ID
+              value: ASIAR6WLSNPDFCG
+            - name: AWS_SECRET_ACCESS_KEY
+              value: mIIbQRDFTGYFGHJG4bM9cwJEy8dam5pwr2xpN
+            command:
+            - "/bin/sh"
+            - "-c"
+            - |
+              AWS_ACCOUNT=134444667722
+              AWS_REGION=us-east-1
+              DOCKER_REGISTRY_SERVER=https://${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com
+              DOCKER_USER=AWS
+              DOCKER_PASSWORD=`aws ecr get-login --region ${AWS_REGION} --registry-ids ${AWS_ACCOUNT} | cut -d' ' -f6`
+              kubectl delete secret -n default aws-registry || true
+              kubectl create secret -n default docker-registry aws-registry \
+              --docker-server=$DOCKER_REGISTRY_SERVER \
+              --docker-username=$DOCKER_USER \
+              --docker-password=$DOCKER_PASSWORD \
+              --docker-email=no@email.local
