@@ -21,9 +21,9 @@ spec:
             image: phanikumary1995/aws-cli-kubectl:latest
             env:
             - name: AWS_ACCESS_KEY_ID
-              value: ASIAR6WLSNPDFCG
+              value: XXXXXXXXXXXXX
             - name: AWS_SECRET_ACCESS_KEY
-              value: mIIbQRDFTGYFGHJG4bM9cwJEy8dam5pwr2xpN
+              value: XXXXXXXXXXXXXXXXXXXXXXX
             command:
             - "/bin/sh"
             - "-c"
