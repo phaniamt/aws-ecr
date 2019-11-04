@@ -28,7 +28,7 @@ spec:
             - "/bin/sh"
             - "-c"
             - |
-              AWS_ACCOUNT=134444667722
+              AWS_ACCOUNT=134444444444444
               AWS_REGION=us-east-1
               DOCKER_REGISTRY_SERVER=https://${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com
               DOCKER_USER=AWS
